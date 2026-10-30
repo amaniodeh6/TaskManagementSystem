@@ -1,0 +1,23 @@
+﻿@model TaskItem
+
+<h2>Delete Task</h2>
+<h3 class="text-danger">Are You sure to Delete this task?</h3>
+
+<dt>Title:</dt>
+<dd>@Model.Title</dd>
+
+<dt>Description:</dt>
+<dd>@Model.Description</dd>
+<dt>Due Date:</dt>
+<dd>@Model.DueDate</dd>
+<dt>Priority:</dt>
+<dd>@Model.Priority</dd>
+<dt>Status:</dt>
+<dd>@Model.Status</dd>
+
+
+<form asp-action="Delete" method="post">
+<input type= "hidden" asp-for="Id" value="@Model.Id" />
+<button type="submit" class="btn btn-danger">Delete</button>
+<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
