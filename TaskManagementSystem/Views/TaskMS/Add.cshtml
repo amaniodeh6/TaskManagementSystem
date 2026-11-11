@@ -2,9 +2,12 @@
 
 <div class="col-md-8 mx-auto mt-4">
 
-    <h2 class="text-center mb-4">Add New Task</h2>
+    <h2 class="text-center mb-2">Add New Task</h2>
+    <p class="text-center text-muted mb-4">
+        Create a new task and organize your work.
+    </p>
 
-    <form asp-action="Add" method="post" class="card shadow-sm p-4">
+    <form asp-action="Add" method="post" class="card task-form shadow-sm p-4">
 
     <div class="mb-3">
         <label asp-for="Title" class="form-label fw-semibold">Task Title:</label>
@@ -14,19 +17,19 @@
 
     <div class="mb-3">
         <label asp-for="Description" class="form-label fw-semibold">Task Description:</label>
-        <input asp-for="Description" class="form-control" />
+        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter task description"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="DueDate" class="form-label fw-semibold">Due Date:</label>
-        <input asp-for="DueDate" class="form-control" />
+        <input asp-for="DueDate" type="datetime-local" class="form-control task-date" />
         <span asp-validation-for="DueDate" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="Priority" class="form-label fw-semibold">Priority:</label>
-        <select asp-for="Priority" class="form-select">
+        <select asp-for="Priority" class="form-select task-select">
         <option value="">Select Priority</option>
         <option value="High">High</option>
         <option value="Medium">Medium</option>
@@ -37,7 +40,7 @@
 
     <div class="mb-3">
         <label asp-for="Status" class="form-label fw-semibold">Task Status:</label>
-            <select asp-for="Status" class="form-select">
+            <select asp-for="Status" class="form-select task-select">
             <option value="">Select Status</option>
             <option value="Pending">Pending</option>
             <option value="InProgress">InProgress</option>
@@ -48,8 +51,11 @@
 
 
         <div class="d-flex justify-content-center gap-3 mt-3">
-            <button type="submit" class="btn btn-primary px-4">Save Task</button>
-            <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="fa-solid fa-plus me-1"></i>
+                Create Task
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary px-4"> Cancel </a>
         </div>
 
     </form>

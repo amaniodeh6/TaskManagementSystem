@@ -1,22 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using TaskManagementSystem.Data;
 using TaskManagementSystem.Models;
 
 namespace TaskManagementSystem.Controllers
 {
+    [Authorize]
     public class TaskMSController : Controller
     {
 
-        private static List<TaskItem> _tasks = new List<TaskItem>();
+        private readonly ApplicationDbContext _context;
 
-        public IActionResult Index(string status)
+        public TaskMSController(ApplicationDbContext context)
         {
-            var tasks = _tasks;
+            this._context = context;
+        }
+
+        public async Task <IActionResult> Index(string status)
+        {
+            var tasks = await _context.Tasks.ToListAsync();
 
             if (!string.IsNullOrEmpty(status))
             {
-                tasks = _tasks
+                tasks = tasks
                     .Where(t => t.Status == status)
                     .ToList();
             }
@@ -24,23 +33,21 @@ namespace TaskManagementSystem.Controllers
             return View(tasks);
         }
 
-
-        public IActionResult Add()
+        [Authorize(Roles = "Admin")]
+        public async Task <IActionResult> Add()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public IActionResult Add(TaskItem task)
+        public async Task<IActionResult> Add(TaskItem task)
         {
             if (ModelState.IsValid)
             {
-                task.Id = _tasks.Count == 0
-                ? 1
-                : _tasks.Max(t => t.Id) + 1;
-
-                _tasks.Add(task);
+                _context.Tasks.Add(task);
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index");
             }
@@ -48,9 +55,10 @@ namespace TaskManagementSystem.Controllers
             return View(task);
         }
 
-        public IActionResult Edit(int Id)
+        [Authorize(Roles = "Admin")]
+        public async Task <IActionResult> Edit(int Id)
         {
-           var exist = _tasks.Find(x => x.Id == Id);
+           var exist = await _context.Tasks.FindAsync(Id);
             if (exist == null)
             {
                 return NotFound();
@@ -59,15 +67,16 @@ namespace TaskManagementSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(TaskItem task)
+        public async Task<IActionResult> Edit(TaskItem task)
         {
             if (!ModelState.IsValid)
             {
                 return View(task);
             }
 
-            var exist = _tasks.Find(x => x.Id == task.Id);
+            var exist = await _context.Tasks.FindAsync(task.Id);
             if(exist != null)
             {
                 exist.Title = task.Title;
@@ -76,15 +85,17 @@ namespace TaskManagementSystem.Controllers
                 exist.DueDate = task.DueDate;
                 exist.Priority = task.Priority;
 
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
             return NotFound();
         }
 
-        public IActionResult Delete(int Id) 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int Id) 
         {
-            var exist = _tasks.Find(x => x.Id == Id);
+            var exist = await _context.Tasks.FindAsync(Id);
             if(exist == null)
             {
                 return NotFound();
@@ -95,19 +106,20 @@ namespace TaskManagementSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
-        public IActionResult ConfirmDelete(int Id) 
+        public async Task<IActionResult> ConfirmDelete(int Id) 
         {
-            var task = _tasks.Find(x => x.Id == Id);
+            var task = await _context.Tasks.FindAsync(Id);
 
             if (task == null)
             {
                 return NotFound();
             }
 
-            _tasks.Remove(task);
-
+            _context.Tasks.Remove(task);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
     }
