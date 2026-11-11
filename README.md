@@ -58,6 +58,7 @@ The application uses (DbInitializer) to create initial accounts and assign roles
 4. Add the following configuration:
 
 
+```json
 {
   "SeedUsers": {
     "Admin": {
@@ -72,6 +73,7 @@ The application uses (DbInitializer) to create initial accounts and assign roles
     }
   }
 }
+```
 
 
 Replace the example passwords with strong passwords that meet ASP.NET Core Identity requirements => password must be contain upper case letter.
