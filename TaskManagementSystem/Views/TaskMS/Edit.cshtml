@@ -1,10 +1,13 @@
 ﻿@model TaskItem
 
-<div class="col-md-8 mx-auto mt-4">
+<div class="task-form-page mx-auto mt-4">
 
-    <h2 class="text-center mb-4">Edit Task</h2>
+    <h2 class="text-center mb-2">Edit Task</h2>
+    <p class="text-center text-muted mb-4">
+        Update your task details.
+    </p>
 
-    <form asp-action="Edit" method="post" class="card shadow-sm p-4">
+    <form asp-action="Edit" method="post" class="card task-form shadow-sm p-4">
 
     <input type="hidden" asp-for="Id" />
 
@@ -16,23 +19,23 @@
 
     <div class="mb-3">
             <label asp-for="Description" class="form-label fw-medium">Task Description:</label>
-            <input asp-for="Description" class="form-control" />
+            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Task description"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
             <label asp-for="DueDate" class="form-label fw-medium">Due Date:</label>
-            <input asp-for="DueDate" class="form-control" />
+            <input asp-for="DueDate" type="datetime-local" class="form-control task-date" />
             <span asp-validation-for="DueDate" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="Priority">Priority:</label>
-            <select asp-for="Priority" class="form-select">
+            <select asp-for="Priority" class="form-select task-select">
             <option value="">Select Priority</option>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
         </select>
         <span asp-validation-for="Priority" class="text-danger"></span>
     </div>
@@ -50,8 +53,11 @@
     </div>
 
         <div class="d-flex justify-content-center gap-3 mt-3">
-    <button type="submit" class="btn btn-primary px-4">Save Task</button>
-            <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="fa-solid fa-check me-1"></i>
+                Save Changes
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary px-4"> Cancel </a>
         </div>
 
     </form>

@@ -1,0 +1,45 @@
+﻿@model Login
+
+<div class="login-page">
+
+    <div class="login-card">
+        <div class="login-avatar">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+        <h2 class="login-title">Welcome Back</h2>
+
+        <p class="login-subtitle">
+            LogIn to manage your tasks
+        </p>
+
+@if (!string.IsNullOrEmpty(Context.Request.Query["ReturnUrl"]))
+{
+    <div class="alert alert-warning">
+        You must log in to access this page.
+    </div>
+}
+
+<form asp-action="Login" method="post">
+
+    <div asp-validation-summary="ModelOnly"class="text-danger"></div>
+
+    <div class="form-group mb-3">
+        <label asp-for="UsernameOrEmail" class="form-label fw-semibold">Username or Email:</label>
+                <input asp-for="UsernameOrEmail" class="form-control login-input" />
+        <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Password" class="form-label fw-semibold"> Password:</label>
+                <input asp-for="Password" type="password" class="form-control login-input" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+            <button type="submit" class="btn login-button">
+                Login
+            </button>
+
+</form>
+    </div>
+</div>
